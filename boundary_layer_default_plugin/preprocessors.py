@@ -33,7 +33,10 @@ class DateStringToDatetime(PropertyPreprocessor):
     def process_arg(self, arg, node, raw_args):
         date = None
         try:
-            date = datetime.datetime.strptime(arg, '%Y-%m-%d')
+            if re.search("^<<.*>>$", arg) is None:
+                date = datetime.datetime.strptime(arg, '%Y-%m-%d')
+            else:
+                date = arg
         except ValueError as e:
             raise Exception(
                 'Error in preprocessor {} for argument `{}`: {}'.format(
